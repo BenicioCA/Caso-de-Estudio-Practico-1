@@ -4,7 +4,7 @@ const app = express()
 app.set("view engine", "ejs")
 
 app.get("/", (req, res) => {
-    console.log("Here")
+    console.log("Running on port: 3000")
     res.render("index")
 })
 

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editor Notas Fidélitas</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="header">
+        Editor de Notas Fidélitas
+    </div>
+    <div class ="container">
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar notas por título o etiquetas...">
+        </div>
+        <div class="note-grid">
+            <% notes.forEach(note => { %>
+                <div class="note">
+                    <h3><%= note.title %></h3>
+                    <p>Creado: <%= note.creationDate %></p>
+                    <p>Última Modificación: <%= note.lastModifiedDate %></p>
+                    <p>Etiquetas: <%= note.tags.join(', ') %></p>
+                </div>
+            <% }) %>
+        </div>
+        <button class="btn" id="createBtn">Crear Nueva Nota</button>
+    </div>
+</body>
+</html>

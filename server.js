@@ -1,12 +1,14 @@
 const express = require("express")
 const app = express()
 const { v4: uuidv4} = require('uuid');
+const methodOverride = require("method-override");
 
 app.set("view engine", "ejs")
 
 app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
+app.use(methodOverride("_method"));
 
 let notes = [
     {
@@ -35,6 +37,15 @@ app.get("/createNota", (req, res) => {
     res.render("createNotas");
 });
 
+app.get("/editNota/:id", (req, res) => {
+    const note = notes.find(note => note.id === req.params.id);
+    if (note) {
+        res.render("editarNotas", { note });
+    } else {
+        res.status(404).send("Nota no encontrada");
+    }
+});
+
 app.post("/notas", (req, res) => {
     const { title, content, tags} = req.body;
     const newNote = {
@@ -47,6 +58,23 @@ app.post("/notas", (req, res) => {
     };
     notes.push(newNote);
     res.redirect("/");
+});
+
+app.put("/notas/:id", (req, res) => {
+    const { title, content, tags } = req.body;
+    const noteIndex = notes.findIndex(note => note.id === req.params.id);
+    if (noteIndex !== -1) {
+        notes[noteIndex] = {
+            ...notes[noteIndex],
+            title,
+            content,
+            lastModifiedDate: new Date().toLocaleDateString(),
+            tags: tags.split(",").map(tag => tag.trim())
+        };
+        res.redirect("/");
+    } else {
+        res.status(404).send("Nota no encontrada");
+    }
 });
 
 app.listen(3000, () => {

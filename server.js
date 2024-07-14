@@ -6,6 +6,7 @@ app.set("view engine", "ejs")
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 let notes = [
     {
@@ -30,6 +31,23 @@ app.get("/", (req, res) => {
     res.render("home", {notes});
 });
 
+app.get("/createNota", (req, res) => {
+    res.render("createNotas");
+});
+
+app.post("/notas", (req, res) => {
+    const { title, content, tags} = req.body;
+    const newNote = {
+        id: uuidv4(),
+        title,
+        content,
+        creationDate: new Date().toLocaleDateString(),
+        lastModifiedDate: new Date().toLocaleString(),
+        tags: tags.split(",").map(tag => tag.trim())
+    };
+    notes.push(newNote);
+    res.redirect("/");
+});
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crear Notas Nuevas</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="header">
+        Crear Nota Nueva
+    </div>
+    <div class="container">
+        <form action="/notas" method="POST">
+            <div class="form-group">
+                <label for="title">Título: </label>
+                <input type="text" id="title" name="title" maxlength="200" required>
+            </div>
+            <div class="form-group">
+                <label for="content">Contenido: </label>
+                <textarea id="content" name="content" required></textarea>
+            </div>
+            <div class="form-group">
+                <label for="tags">Etiquetas: </label>
+                <input type="text" id="tags" name="tags">
+            </div>
+            <button class="btn" type="submit">Guardar Nota</button>
+            <button class="btn" type="button" onclick="window.location.href='/'">Cancelar</button>
+        </form>
+    </div>
+</body>
+</html>

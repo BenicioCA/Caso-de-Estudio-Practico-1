@@ -77,6 +77,11 @@ app.put("/notas/:id", (req, res) => {
     }
 });
 
+app.delete("/notas/:id", (req, res) => {
+    notes = notes.filter(note => note.id !== req.params.id);
+    res.redirect("/");
+});
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
 });

@@ -21,7 +21,11 @@
                     <p>Creado: <%= note.creationDate %></p>
                     <p>Última Modificación: <%= note.lastModifiedDate %></p>
                     <p>Etiquetas: <%= note.tags.join(', ') %></p>
+                    <p><%= note.content %></p>
                     <button class="btn" onclick="window.location.href='/editNota/<%= note.id %>'">Editar Nota</button>
+                    <form action="/notas/<%= note.id %>?_method=DELETE" method="POST" style="display: inline;">
+                        <button class="btn" type="submit">Eliminar Nota</button>
+                    </form>
                 </div>
             <% }) %>
         </div>

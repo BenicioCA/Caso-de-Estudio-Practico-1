@@ -21,11 +21,11 @@
                     <p>Creado: <%= note.creationDate %></p>
                     <p>Última Modificación: <%= note.lastModifiedDate %></p>
                     <p>Etiquetas: <%= note.tags.join(', ') %></p>
+                    <button class="btn" onclick="window.location.href='/editNota/<%= note.id %>'">Editar Nota</button>
                 </div>
             <% }) %>
         </div>
         <button class="btn" id="createBtn" onclick="window.location.href='/createNota'">Crear Nueva Nota</button>
-        <button class="btn" id="editarBtn">Editar Nota</button>
     </div>
 </body>
 </html>

@@ -1,5 +1,6 @@
-const express = require("express")
-const app = express()
+const express = require("express");
+const app = express();
+const session = require('express-session');
 const { v4: uuidv4} = require('uuid');
 const methodOverride = require("method-override");
 
@@ -9,6 +10,12 @@ app.use(express.static('public'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true}));
 app.use(methodOverride("_method"));
+
+app.use(session({
+    secret: 'your_secret_key',
+    resave: false,
+    saveUninitialized: true
+}));
 
 let notes = [
     {
@@ -30,7 +37,9 @@ let notes = [
 ];
 
 app.get("/", (req, res) => {
-    res.render("home", {notes});
+    const successMessage = req.session.successMessage;
+    req.session.successMessage = null; 
+    res.render("home", { notes, successMessage });
 });
 
 app.get("/createNota", (req, res) => {
@@ -48,28 +57,36 @@ app.get("/editNota/:id", (req, res) => {
 
 app.post("/notas", (req, res) => {
     const { title, content, tags} = req.body;
+    if (!title || !content){
+        return res.status(400).send("El título y el contenido son obligatorios");
+    }
     const newNote = {
         id: uuidv4(),
         title,
         content,
         creationDate: new Date().toLocaleDateString(),
         lastModifiedDate: new Date().toLocaleString(),
-        tags: tags.split(",").map(tag => tag.trim())
+        tags: tags ? tags.split(",").map(tag => tag.trim()) : []
     };
     notes.push(newNote);
+    req.session.successMessage = "¡Nota creada con éxito!";
     res.redirect("/");
 });
 
 app.put("/notas/:id", (req, res) => {
     const { title, content, tags } = req.body;
+    if (!title || !content) {
+        return res.status(400).send("El título y el contenido son obligatorios.");
+    }
+
     const noteIndex = notes.findIndex(note => note.id === req.params.id);
     if (noteIndex !== -1) {
         notes[noteIndex] = {
             ...notes[noteIndex],
             title,
             content,
-            lastModifiedDate: new Date().toLocaleDateString(),
-            tags: tags.split(",").map(tag => tag.trim())
+            lastModifiedDate: new Date().toLocaleString(),
+            tags: tags ? tags.split(",").map(tag => tag.trim()) : []
         };
         res.redirect("/");
     } else {
@@ -89,7 +106,7 @@ app.get("/search", (req, res) => {
             note.tags.some(tag => tag.toLowerCase().includes(query));
     });
     res.render("home", { notes: filteredNotes });
-})
+});
 
 app.listen(3000, () => {
     console.log("Server is running on port 3000");

@@ -22,7 +22,7 @@
             </div>
             <div class="form-group">
                 <label for="tags">Etiquetas: </label>
-                <input type="text" id="tags" name="tags" value="<%= Array.isArray(note.tags) ? note.tags.join(', ') : '' %>">
+                <input type="text" id="tags" name="tags" maxlength="100" value="<%= Array.isArray(note.tags) ? note.tags.join(', ') : '' %>">
             </div>
             <button class="btn" type="submit">Guardar Cambios</button>
             <button class="btn" type="button" onclick="window.location.href='/'">Cancelar</button>

@@ -82,6 +82,15 @@ app.delete("/notas/:id", (req, res) => {
     res.redirect("/");
 });
 
+app.get("/search", (req, res) => {
+    const query = req.query.query.toLowerCase();
+    const filteredNotes = notes.filter(note => {
+        return note.title.toLowerCase().includes(query) ||
+            note.tags.some(tag => tag.toLowerCase().includes(query));
+    });
+    res.render("home", { notes: filteredNotes });
+})
+
 app.listen(3000, () => {
     console.log("Server is running on port 3000");
-});
+}); 
